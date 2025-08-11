@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DeepTruth - AI-Powered Deepfake Detection</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <i class="fas fa-shield-alt"></i>
+                    <h2>DeepTruth</h2>
+                </div>
+                <button class="theme-toggle" id="themeToggle">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="#" class="nav-link active" data-section="dashboard"><i class="fas fa-tachometer-alt"></i><span data-i18n="dashboard">Dashboard</span></a></li>
+                    <li><a href="#" class="nav-link" data-section="upload"><i class="fas fa-upload"></i><span data-i18n="upload_content">Upload Content</span></a></li>
+                    <li><a href="#" class="nav-link" data-section="monitoring"><i class="fas fa-radar"></i><span data-i18n="monitoring">Social Monitoring</span></a></li>
+                    <li><a href="#" class="nav-link" data-section="blockchain"><i class="fas fa-link"></i><span data-i18n="blockchain">Blockchain Ledger</span></a></li>
+                    <li><a href="#" class="nav-link" data-section="reports"><i class="fas fa-chart-line"></i><span data-i18n="reports">Reports & Analytics</span></a></li>
+                    <li><a href="#" class="nav-link" data-section="admin"><i class="fas fa-cog"></i><span>Admin Panel</span></a></li>
+                </ul>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <div class="language-selector">
+                    <select id="languageSelect" class="form-control">
+                        <option value="en">English</option>
+                        <option value="hi">हिंदी</option>
+                        <option value="ta">தமிழ்</option>
+                        <option value="te">తెలుగు</option>
+                        <option value="ml">മലയാളം</option>
+                        <option value="gu">ગુજરાતી</option>
+                        <option value="mr">मराठी</option>
+                    </select>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Dashboard Section -->
+            <section id="dashboard" class="content-section active">
+                <div class="content-header">
+                    <h1 data-i18n="dashboard">Dashboard</h1>
+                    <div class="real-time-indicator">
+                        <span class="pulse"></span>
+                        <span>Live Monitoring</span>
+                    </div>
+                </div>
+
+                <!-- Statistics Cards -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fas fa-search"></i></div>
+                        <div class="stat-content">
+                            <h3 id="totalAnalyzed">45,782</h3>
+                            <p data-i18n="total_analyzed">Total Analyzed</p>
+                        </div>
+                    </div>
+                    <div class="stat-card fake">
+                        <div class="stat-icon"><i class="fas fa-exclamation-triangle"></i></div>
+                        <div class="stat-content">
+                            <h3 id="fakeDetected">12,847</h3>
+                            <p data-i18n="fake_detected">Fake Detected</p>
+                        </div>
+                    </div>
+                    <div class="stat-card authentic">
+                        <div class="stat-icon"><i class="fas fa-check-circle"></i></div>
+                        <div class="stat-content">
+                            <h3 id="authenticVerified">28,935</h3>
+                            <p data-i18n="authentic_verified">Authentic Verified</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fas fa-percentage"></i></div>
+                        <div class="stat-content">
+                            <h3 id="accuracyRate">94.2%</h3>
+                            <p data-i18n="accuracy_rate">Accuracy Rate</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Detections and Chart -->
+                <div class="dashboard-grid">
+                    <div class="card recent-detections">
+                        <div class="card-header">
+                            <h3 data-i18n="recent_detections">Recent Detections</h3>
+                            <button class="btn btn--sm btn--outline">View All</button>
+                        </div>
+                        <div class="card-body">
+                            <div id="recentDetectionsList" class="detections-list"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Detection Trends</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="chart-container" style="position: relative; height: 300px;">
+                                <canvas id="trendsChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Upload Section -->
+            <section id="upload" class="content-section">
+                <div class="content-header">
+                    <h1 data-i18n="upload_content">Upload Content</h1>
+                    <p>Upload images, videos, or enter URLs for authenticity analysis</p>
+                </div>
+
+                <div class="upload-container">
+                    <div class="upload-area" id="uploadArea">
+                        <div class="upload-icon">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                        </div>
+                        <h3 data-i18n="upload_file">Drag & Drop files here or click to browse</h3>
+                        <p>Supported formats: JPG, PNG, MP4, MOV, AVI</p>
+                        <input type="file" id="fileInput" accept="image/*,video/*" multiple hidden>
+                    </div>
+                    
+                    <div class="url-input-section">
+                        <div class="form-group">
+                            <label class="form-label" data-i18n="enter_url">Enter URL to Analyze</label>
+                            <div class="url-input-group">
+                                <input type="url" id="urlInput" class="form-control" placeholder="https://example.com/content">
+                                <button class="btn btn--primary" id="analyzeUrlBtn">Analyze URL</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Analysis Results -->
+                <div id="analysisResults" class="analysis-results hidden">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Analysis Results</h3>
+                            <div class="analysis-status">
+                                <div class="progress-bar">
+                                    <div class="progress-fill" id="analysisProgress"></div>
+                                </div>
+                                <span id="progressText">Analyzing...</span>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div id="resultContent"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Social Media Monitoring -->
+            <section id="monitoring" class="content-section">
+                <div class="content-header">
+                    <h1 data-i18n="monitoring">Social Media Monitoring</h1>
+                    <div class="monitoring-controls">
+                        <select class="form-control">
+                            <option>All Platforms</option>
+                            <option>Twitter/X</option>
+                            <option>Facebook</option>
+                            <option>Instagram</option>
+                            <option>YouTube</option>
+                        </select>
+                        <select class="form-control">
+                            <option>All Regions</option>
+                            <option>Delhi</option>
+                            <option>Mumbai</option>
+                            <option>Chennai</option>
+                            <option>Bangalore</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="monitoring-grid">
+                    <div class="card live-feed">
+                        <div class="card-header">
+                            <h3>Live Social Media Feed</h3>
+                            <div class="status-indicator">
+                                <span class="pulse"></span>
+                                <span>Live</span>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div id="socialFeed" class="social-feed"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="card alerts-panel">
+                        <div class="card-header">
+                            <h3>Risk Alerts</h3>
+                            <span class="alert-count">3 Active</span>
+                        </div>
+                        <div class="card-body">
+                            <div class="alert-item high">
+                                <div class="alert-level">HIGH</div>
+                                <div class="alert-content">
+                                    <h4>Potential Deepfake Video</h4>
+                                    <p>Political figure deepfake detected on Twitter</p>
+                                    <small>2 minutes ago</small>
+                                </div>
+                            </div>
+                            <div class="alert-item medium">
+                                <div class="alert-level">MEDIUM</div>
+                                <div class="alert-content">
+                                    <h4>Manipulated Image</h4>
+                                    <p>Celebrity photo with face swap indicators</p>
+                                    <small>5 minutes ago</small>
+                                </div>
+                            </div>
+                            <div class="alert-item low">
+                                <div class="alert-level">LOW</div>
+                                <div class="alert-content">
+                                    <h4>Suspicious URL</h4>
+                                    <p>Fake news website detected</p>
+                                    <small>12 minutes ago</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Blockchain Ledger -->
+            <section id="blockchain" class="content-section">
+                <div class="content-header">
+                    <h1 data-i18n="blockchain">Blockchain Provenance Ledger</h1>
+                    <p>Immutable record of content verification results</p>
+                </div>
+
+                <div class="blockchain-stats">
+                    <div class="blockchain-stat">
+                        <h3>1,247</h3>
+                        <p>Verified Records</p>
+                    </div>
+                    <div class="blockchain-stat">
+                        <h3>99.9%</h3>
+                        <p>Immutability Rate</p>
+                    </div>
+                    <div class="blockchain-stat">
+                        <h3>0.3s</h3>
+                        <p>Avg. Verification Time</p>
+                    </div>
+                </div>
+
+                <div class="card blockchain-ledger">
+                    <div class="card-header">
+                        <h3>Recent Blockchain Records</h3>
+                        <div class="ledger-controls">
+                            <input type="text" class="form-control" placeholder="Search by hash or content ID">
+                            <button class="btn btn--outline">Search</button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div id="blockchainRecords" class="blockchain-table"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Reports & Analytics -->
+            <section id="reports" class="content-section">
+                <div class="content-header">
+                    <h1 data-i18n="reports">Reports & Analytics</h1>
+                    <div class="report-controls">
+                        <select class="form-control">
+                            <option>Last 7 days</option>
+                            <option>Last 30 days</option>
+                            <option>Last 3 months</option>
+                            <option>Custom Range</option>
+                        </select>
+                        <button class="btn btn--primary">
+                            <i class="fas fa-download"></i>
+                            Export Report
+                        </button>
+                    </div>
+                </div>
+
+                <div class="analytics-grid">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Platform Distribution</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="chart-container" style="position: relative; height: 300px;">
+                                <canvas id="platformChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Regional Analysis</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="chart-container" style="position: relative; height: 300px;">
+                                <canvas id="regionalChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Admin Panel -->
+            <section id="admin" class="content-section">
+                <div class="content-header">
+                    <h1>Admin Panel</h1>
+                    <p>System management and configuration</p>
+                </div>
+
+                <div class="admin-grid">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>User Management</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="admin-stats">
+                                <div class="admin-stat">
+                                    <span class="stat-number">247</span>
+                                    <span class="stat-label">Active Users</span>
+                                </div>
+                                <div class="admin-stat">
+                                    <span class="stat-number">15</span>
+                                    <span class="stat-label">Admins</span>
+                                </div>
+                                <div class="admin-stat">
+                                    <span class="stat-number">832</span>
+                                    <span class="stat-label">Total Users</span>
+                                </div>
+                            </div>
+                            <button class="btn btn--primary">Manage Users</button>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>System Health</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="health-metrics">
+                                <div class="health-item">
+                                    <span>API Response Time</span>
+                                    <div class="health-indicator good">
+                                        <span>125ms</span>
+                                        <i class="fas fa-check"></i>
+                                    </div>
+                                </div>
+                                <div class="health-item">
+                                    <span>Database Status</span>
+                                    <div class="health-indicator good">
+                                        <span>Healthy</span>
+                                        <i class="fas fa-check"></i>
+                                    </div>
+                                </div>
+                                <div class="health-item">
+                                    <span>Blockchain Sync</span>
+                                    <div class="health-indicator good">
+                                        <span>Synced</span>
+                                        <i class="fas fa-check"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast hidden">
+        <div class="toast-content">
+            <i class="toast-icon"></i>
+            <span class="toast-message"></span>
+        </div>
+        <button class="toast-close"><i class="fas fa-times"></i></button>
+    </div>
+
+    <!-- Analysis Modal -->
+    <div id="analysisModal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Detailed Analysis Results</h3>
+                <button class="modal-close"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body" id="modalAnalysisContent">
+                <!-- Content populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
